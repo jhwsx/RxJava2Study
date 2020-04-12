@@ -33,16 +33,17 @@ public class HotObservable {
         Observable observable = Observable.create(new ObservableOnSubscribe<Long>() {
             @Override
             public void subscribe(ObservableEmitter<Long> emitter) throws Exception {
+                System.out.println(emitter.hashCode());
                 Thread.sleep(10);
-                emitter.onNext(1L);
+                emitter.onNext(System.currentTimeMillis());
                 Thread.sleep(10);
-                emitter.onNext(2L);
+                emitter.onNext(System.currentTimeMillis());
                 Thread.sleep(10);
-                emitter.onNext(3L);
+                emitter.onNext(System.currentTimeMillis());
                 Thread.sleep(10);
-                emitter.onNext(4L);
+                emitter.onNext(System.currentTimeMillis());
                 Thread.sleep(10);
-                emitter.onNext(5L);
+                emitter.onNext(System.currentTimeMillis());
             }
         }).subscribeOn(Schedulers.computation());
         ConnectableObservable connectableObservable = observable.publish();

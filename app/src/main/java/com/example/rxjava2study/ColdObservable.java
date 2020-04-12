@@ -13,10 +13,10 @@ import io.reactivex.functions.Consumer;
  */
 public class ColdObservable {
     public static void main(String[] args) {
-         testInterval();
+//         testInterval();
 //         testJust();
 //         testRange();
-//         testCreate();
+         testCreate();
 //        testFromArray();
     }
 
@@ -29,11 +29,17 @@ public class ColdObservable {
         Observable observable = Observable.create(new ObservableOnSubscribe<Long>() {
             @Override
             public void subscribe(ObservableEmitter<Long> emitter) throws Exception {
-                emitter.onNext(1L);
-                emitter.onNext(2L);
-                emitter.onNext(3L);
-                emitter.onNext(4L);
-                emitter.onNext(5L);
+                System.out.println(emitter.hashCode());
+                Thread.sleep(10);
+                emitter.onNext(System.currentTimeMillis());
+                Thread.sleep(10);
+                emitter.onNext(System.currentTimeMillis());
+                Thread.sleep(10);
+                emitter.onNext(System.currentTimeMillis());
+                Thread.sleep(10);
+                emitter.onNext(System.currentTimeMillis());
+                Thread.sleep(10);
+                emitter.onNext(System.currentTimeMillis());
             }
         });
         common(observable);
