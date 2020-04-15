@@ -1,4 +1,4 @@
-package com.example.rxjava2study;
+package com.example.rxjava2study.part2_code_hot_observable;
 
 import java.util.concurrent.TimeUnit;
 

@@ -8,7 +8,11 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.internal.operators.observable.ObservableObserveOn;
+import io.reactivex.internal.operators.observable.ObservableSubscribeOn;
+import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -17,7 +21,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        // 创建被观察者
+        // 装饰器模式的应用
+        // 自定义操作符需要 extends AbstractObservableWithUpstream<T, U>，查看 map 源码。
+        // 1，创建被观察者
         Observable<String> observable = Observable.create(new ObservableOnSubscribe<String>() {
             @Override
             public void subscribe(ObservableEmitter<String> emitter) throws Exception {
@@ -26,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
                 emitter.onComplete();
             }
         });
-        // 创建观察者
+        // 2，创建观察者
         Observer<String> observer = new Observer<String>() {
             @Override
             public void onSubscribe(Disposable d) {
@@ -48,7 +54,10 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, "onComplete: ");
             }
         };
-        // 订阅
-        observable.subscribe(observer);
+        // 3, 线程切换
+        ObservableSubscribeOn observableSubscribeOn = (ObservableSubscribeOn) observable.subscribeOn(Schedulers.io());
+        ObservableObserveOn observableObserveOn = (ObservableObserveOn) observableSubscribeOn .observeOn(AndroidSchedulers.mainThread());
+                // 4, 订阅
+        observableObserveOn.subscribe(observer);
     }
 }

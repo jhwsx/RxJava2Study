@@ -1,4 +1,4 @@
-package com.example.rxjava2study.observer;
+package com.example.rxjava2study.part1_observer.classical;
 
 
 import java.util.ArrayList;
